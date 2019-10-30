@@ -77,7 +77,7 @@ public class ContaMagicaTest {
     @Tag("deposito")
     public void SaldoDepositoSilver(int valorDeposito) throws INVALID_OPER_EXCEPTION {
         conta.deposito(valorDeposito);
-        assertEquals(valorDeposito, conta.getSaldo());
+        assertEquals(valorDeposito, conta.getSaldo(), 0.001);
     }
 
     @ParameterizedTest
@@ -87,7 +87,7 @@ public class ContaMagicaTest {
     public void SaldoDepositoGold(int valorDeposito) throws INVALID_OPER_EXCEPTION {
         conta.deposito(INICIAL_GOLD);
         conta.deposito(valorDeposito);
-        assertEquals(INICIAL_GOLD + (valorDeposito * 1.01), conta.getSaldo());
+        assertEquals(INICIAL_GOLD + (valorDeposito * 1.01), conta.getSaldo(), 0.001);
     }
 
     @ParameterizedTest
@@ -98,7 +98,7 @@ public class ContaMagicaTest {
         conta.deposito(INICIAL_GOLD);
         conta.deposito(INICIAL_PLATINUM);
         conta.deposito(valorDeposito);
-        assertEquals(INICIAL_GOLD + (INICIAL_PLATINUM * 1.01) + (valorDeposito * 1.025), conta.getSaldo());
+        assertEquals(INICIAL_GOLD + (INICIAL_PLATINUM * 1.01) + (valorDeposito * 1.025), conta.getSaldo(), 0.001);
     }
 
     @ParameterizedTest

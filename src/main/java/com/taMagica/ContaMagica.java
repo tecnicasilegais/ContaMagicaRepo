@@ -1,74 +1,85 @@
 package com.taMagica;
 
-public class ContaMagica {
+public class ContaMagica implements IContaMagica {
+
     public static final int SILVER = 0;
     public static final int GOLD = 1;
     public static final int PLATINUM = 2;
 
-    private int status;
     private double saldo;
+    private int status;
 
     public ContaMagica() {
-        this.status = SILVER;
         this.saldo = 0.0;
+        this.status = SILVER;
     }
 
+    @Override
     public double getSaldo() {
         return this.saldo;
     }
 
+    @Override
     public int getStatus() {
         return this.status;
     }
 
+    @Override
     public void deposito(int valor) throws INVALID_OPER_EXCEPTION {
-        if (valor <= 0) {
-            throw new INVALID_OPER_EXCEPTION("Não é possível depositar um valor não positivo");
+
+        if (valor < 0) {
+            throw new INVALID_OPER_EXCEPTION("Valor Inválido!");
+        } else {
+            if (getStatus() == 0) {
+                double novoSaldo = getSaldo() + valor;
+                this.saldo = novoSaldo;
+            } else if (getStatus() == 1) {
+                double novoSaldo = getSaldo() + valor + (valor * 0.01);
+                this.saldo = novoSaldo;
+            } else if (getStatus() == 2) {
+                double novoSaldo = getSaldo() + valor + (valor * 0.025);
+                this.saldo = novoSaldo;
+            }
+
+            if (getStatus() == 0) {
+                if (getSaldo() >= 50000) {
+                    this.status = GOLD;
+                }
+            }
+
+            else if (getStatus() == 1) {
+                if (getSaldo() >= 200000) {
+                    this.status = PLATINUM;
+                }
+            }
         }
-        this.executaDeposito(valor);
     }
 
+    @Override
     public void retirada(int valor) throws INVALID_OPER_EXCEPTION {
-        if (valor <= 0){
-            throw new INVALID_OPER_EXCEPTION("Não é possível retirar um valor não positivo");
+
+        if (valor < 0) {
+            throw new INVALID_OPER_EXCEPTION("Valor Inválido!");
+        } else if (getSaldo() >= valor) {
+            double novoSaldo = getSaldo() - valor;
+            this.saldo = novoSaldo;
+
+            if (getStatus() == 2) {
+                if (getSaldo() < 100000) {
+                    this.status = GOLD;
+                }
+            }
+
+            else if (getStatus() == 1) {
+                if (getSaldo() < 25000) {
+                    this.status = SILVER;
+                }
+            }
+
+        } else {
+            throw new INVALID_OPER_EXCEPTION("Saldo Insuficiente!");
         }
-        this.executaRetirada(valor);
+
     }
 
-    private void executaRetirada(int valor) throws INVALID_OPER_EXCEPTION {
-        double novoSaldo = this.saldo - valor;
-        if (novoSaldo < 0){
-            throw new INVALID_OPER_EXCEPTION("Saldo não pode ficar negativo");
-        }
-        if (this.status == PLATINUM && novoSaldo < 100000){
-            this.status = GOLD;
-        }
-        else if (this.status == GOLD && novoSaldo < 25000){
-            this.status = SILVER;
-        }
-        this.saldo = novoSaldo;
-    }
-
-    private void executaDeposito(int valor) {
-        double incremento = this.calculaIncremento();
-        double depositoFinal = valor + valor*incremento;
-        this.saldo += depositoFinal;
-        if (this.status == SILVER && this.saldo >= 50000){
-            this.status = GOLD;
-        }
-        else if(this.status == GOLD && this.saldo >= 200000){
-            this.status = PLATINUM;
-        }
-    }
-
-    private double calculaIncremento() {
-        switch (this.status) {
-            case 1:
-                return 0.01;
-            case 2:
-                return 0.025;
-            default:
-                return 0;
-        }
-    }
 }

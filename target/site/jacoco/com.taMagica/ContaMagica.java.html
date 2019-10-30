@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ContaMagica.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ContaMagicaRepo</a> &gt; <a href="index.source.html" class="el_package">com.taMagica</a> &gt; <span class="el_source">ContaMagica.java</span></div><h1>ContaMagica.java</h1><pre class="source lang-java linenums">package com.taMagica;
+
+public class ContaMagica implements IContaMagica {
+
+    public static final int SILVER = 0;
+    public static final int GOLD = 1;
+    public static final int PLATINUM = 2;
+
+    private double saldo;
+    private int status;
+
+<span class="fc" id="L12">    public ContaMagica() {</span>
+<span class="fc" id="L13">        this.saldo = 0.0;</span>
+<span class="fc" id="L14">        this.status = SILVER;</span>
+<span class="fc" id="L15">    }</span>
+
+    @Override
+    public double getSaldo() {
+<span class="fc" id="L19">        return this.saldo;</span>
+    }
+
+    @Override
+    public int getStatus() {
+<span class="fc" id="L24">        return this.status;</span>
+    }
+
+    @Override
+    public void deposito(int valor) throws INVALID_OPER_EXCEPTION {
+
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        if (valor &lt; 0) {</span>
+<span class="nc" id="L31">            throw new INVALID_OPER_EXCEPTION(&quot;Valor Inválido!&quot;);</span>
+        } else {
+<span class="fc bfc" id="L33" title="All 2 branches covered.">            if (getStatus() == 0) {</span>
+<span class="fc" id="L34">                double novoSaldo = getSaldo() + valor;</span>
+<span class="fc" id="L35">                this.saldo = novoSaldo;</span>
+<span class="fc bfc" id="L36" title="All 2 branches covered.">            } else if (getStatus() == 1) {</span>
+<span class="fc" id="L37">                double novoSaldo = getSaldo() + valor + (valor * 0.01);</span>
+<span class="fc" id="L38">                this.saldo = novoSaldo;</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">            } else if (getStatus() == 2) {</span>
+<span class="fc" id="L40">                double novoSaldo = getSaldo() + valor + (valor * 0.025);</span>
+<span class="fc" id="L41">                this.saldo = novoSaldo;</span>
+            }
+
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (getStatus() == 0) {</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">                if (getSaldo() &gt;= 50000) {</span>
+<span class="fc" id="L46">                    this.status = GOLD;</span>
+                }
+            }
+
+<span class="fc bfc" id="L50" title="All 2 branches covered.">            else if (getStatus() == 1) {</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">                if (getSaldo() &gt;= 200000) {</span>
+<span class="fc" id="L52">                    this.status = PLATINUM;</span>
+                }
+            }
+        }
+<span class="fc" id="L56">    }</span>
+
+    @Override
+    public void retirada(int valor) throws INVALID_OPER_EXCEPTION {
+
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (valor &lt; 0) {</span>
+<span class="nc" id="L62">            throw new INVALID_OPER_EXCEPTION(&quot;Valor Inválido!&quot;);</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">        } else if (getSaldo() &gt;= valor) {</span>
+<span class="fc" id="L64">            double novoSaldo = getSaldo() - valor;</span>
+<span class="fc" id="L65">            this.saldo = novoSaldo;</span>
+
+<span class="fc bfc" id="L67" title="All 2 branches covered.">            if (getStatus() == 2) {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">                if (getSaldo() &lt; 100000) {</span>
+<span class="fc" id="L69">                    this.status = GOLD;</span>
+                }
+            }
+
+<span class="fc bfc" id="L73" title="All 2 branches covered.">            else if (getStatus() == 1) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                if (getSaldo() &lt; 25000) {</span>
+<span class="fc" id="L75">                    this.status = SILVER;</span>
+                }
+            }
+
+<span class="fc" id="L79">        } else {</span>
+<span class="fc" id="L80">            throw new INVALID_OPER_EXCEPTION(&quot;Saldo Insuficiente!&quot;);</span>
+        }
+
+<span class="fc" id="L83">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
